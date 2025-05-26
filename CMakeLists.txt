@@ -28,51 +28,45 @@ set(PICO_BOARD pico_w CACHE STRING "Board type")
 # Pull in Raspberry Pi Pico SDK (must be before project)
 include(pico_sdk_import.cmake)
 
-project(iot_security_lab C CXX ASM)
+project(SegurancaIoT C CXX ASM)
 
 # Initialise the Raspberry Pi Pico SDK
 pico_sdk_init()
 
 # Add executable. Default name is the project name, version 0.1
 
-add_executable(iot_security_lab iot_security_lab.c 
-    src/mqtt_comm.c
-    src/wifi_conn.c
-    src/xor_cipher.c
-)
+add_executable(SegurancaIoT 
+    SegurancaIoT.c 
+    include/wifi_conn.c
+    include/mqtt_comm.c
+    include/encrypt.c)
 
-pico_set_program_name(iot_security_lab "iot_security_lab")
-pico_set_program_version(iot_security_lab "0.1")
+pico_set_program_name(SegurancaIoT "SegurancaIoT")
+pico_set_program_version(SegurancaIoT "0.1")
 
 # Modify the below lines to enable/disable output over UART/USB
-pico_enable_stdio_uart(iot_security_lab 0)
-pico_enable_stdio_usb(iot_security_lab 1)
+pico_enable_stdio_uart(SegurancaIoT 0)
+pico_enable_stdio_usb(SegurancaIoT 1)
 
 # Add the standard library to the build
-target_link_libraries(iot_security_lab
-        # Biblioteca padrão do Pico SDK, que fornece funções básicas para o RP2040 (GPIO, temporizadores, UART, etc.).
+target_link_libraries(SegurancaIoT
         pico_stdlib
-        # Oferece suporte Wi-Fi (CYW43) com LwIP (pilha TCP/IP) em um modo thread-safe em segundo plano.
-        pico_cyw43_arch_lwip_threadsafe_background
-        # Adiciona suporte a cliente MQTT sobre o LwIP.
         pico_lwip_mqtt
-        # A pilha Lightweight IP (LwIP), que fornece funcionalidades TCP/IP (HTTP, MQTT, UDP, DHCP, etc.).
         pico_lwip
-        # O driver do chip Wi-Fi CYW43 (usado no Pico W).
+        pico_cyw43_arch_lwip_threadsafe_background
         pico_cyw43_driver
-        # pico_time
-        # pico_unique_id
-        )
+        pico_stdlib)
 
 # Add the standard include files to the build
-target_include_directories(iot_security_lab PRIVATE
+target_include_directories(SegurancaIoT PRIVATE
         ${CMAKE_CURRENT_LIST_DIR}
+        ${CMAKE_CURRENT_LIST_DIR}/include
 )
 
 # Add any user requested libraries
-target_link_libraries(iot_security_lab 
+target_link_libraries(SegurancaIoT 
         
         )
 
-pico_add_extra_outputs(iot_security_lab)
+pico_add_extra_outputs(SegurancaIoT)
 
